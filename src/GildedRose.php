@@ -66,6 +66,18 @@ class GildedRose {
         return $delta;
     }
 
+    function adjustQualityToFitLimits(Item $item) {
+        //The $quality of an item is never more than 50
+        if ($item->name != 'Sulfuras, Hand of Ragnaros' && $item->quality >= 50) {
+            $item->quality = 50;
+        }
+
+        // The $quality of an item is never negative
+        if ($item->quality < 0) {
+            $item->quality = 0;
+        }
+    }
+
     function updateQuality() {
         foreach ($this->items as $item) {
 
@@ -76,15 +88,7 @@ class GildedRose {
             $qualityDelta = $this->getQualityDelta($item);
             $item->quality = $item->quality + $qualityDelta;
 
-            //The $quality of an item is never more than 50
-            if ($item->name != 'Sulfuras, Hand of Ragnaros' && $item->quality >= 50) {
-                $item->quality = 50;
-            }
-
-            // The $quality of an item is never negative
-            if ($item->quality < 0) {
-                $item->quality = 0;
-            }
+            $this->adjustQualityToFitLimits($item);
         }
     }
 }
