@@ -3,8 +3,8 @@ require_once 'SpecificItem.php';
 
 class LegendaryItem extends SpecificItem {
 
-    function __construct($name, $sellIn) {
-    	parent::__construct($name, $sellIn, 80);
+    function __construct($name) {
+    	parent::__construct($name, 0, 80);
     }
 
 	public function decreaseSellIn() {
