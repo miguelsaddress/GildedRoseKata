@@ -66,14 +66,100 @@ public function testExpectedOutput() {
 }
 
 
+    public function testQualityDecreasesTwiceAsFastWhenExpired() {
+        //Once the sell by date has passed, $quality degrades twice as fast
+        $item = new Item('Elixir of the Mongoose', 0, 7);
+        $app = new GildedRose([$item]);
+        $app->updateQuality();
+
+        $this->assertEquals($item->quality, 5);
+    }
+
+    public function testQualityOfItemIsNeverNegative() {
+        // The $quality of an item is never negative
+        $item = new Item('Elixir of the Mongoose', 0, 0);
+        $app = new GildedRose([$item]);
+        $app->updateQuality();
+
+        $this->assertEquals($item->quality, 0);
+
+        //more days pass and it is still zero
+        $app->updateQuality();
+        $app->updateQuality();
+        $app->updateQuality();
+
+        $this->assertEquals($item->quality, 0);
+    }
+
+    public function testAgedBrieIncreasesQualityTheOlderItGets() {
+        // "Aged Brie" actually increases in $quality the older it gets
+        $item = new Item('Aged Brie', 2, 0);
+        $app = new GildedRose([$item]);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 1);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 2);
+    }
+
+    public function testQualityIsNeverMoreThan50() {
+        // The $quality of an item is never more than 50
+        $item = new Item('Aged Brie', 2, 49);
+        $app = new GildedRose([$item]);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 50);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 50);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 50);
+    }
+
+    public function testBackstagePassesIncreasesQualityTheOlderItGets() {
+        //"Backstage passes" increases in $quality as it's $sellIn value approaches;
+        //When sellIn is greater than 10
+
+        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 22, 0);
+        $app = new GildedRose([$item]);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 1);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 2);
+    }
 
 
+    public function testBackStageSellInIn10DaysOrLess() {
+        // "Backstage passes" increases in $quality as it's $sellIn value approaches;
+        // $quality increases by 2 when there are 10 days or less 
+        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 10, 0);
+        $app = new GildedRose([$item]);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 2);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 4);
+    }
 
-    // function testFoo() {
-    //     $items = array(new Item("foo", 0, 0));
-    //     $gildedRose = new GildedRose($items);
-    //     $gildedRose->update_quality();
-    //     $this->assertNotEquals("fixme", $items[0]->name);
-    // }
+    public function testBackStageSellInIn5DaysOrLess() {
+        // "Backstage passes" increases in $quality as it's $sellIn value approaches;
+        // and by 3 when there are 5 days or less
+        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 5, 0);
+        $app = new GildedRose([$item]);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 3);
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 6);
+    }
+
+    public function testBackStageQualityDropsToZeroWhenExpired() {
+        // "Backstage passes" increases in $quality as it's $sellIn value approaches;
+        // but $quality drops to 0 after the concert
+        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 1, 0);
+        $app = new GildedRose([$item]);
+        //Didnt expire, so the quality increases
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 3);
+        //Now it expires, so the quality goes to Zero
+        $app->updateQuality();
+        $this->assertEquals($item->quality, 0);
+    }
+
 
 }
