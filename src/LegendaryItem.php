@@ -4,26 +4,26 @@ require_once 'SpecificItem.php';
 class LegendaryItem extends SpecificItem {
 
     function __construct($name) {
-    	parent::__construct($name, 0, 80);
+        parent::__construct($name, 0, 80);
     }
 
-	public function decreaseSellIn() {
-		// a legendary item, never has to be sold
-	}
+    public function decreaseSellIn() {
+        // a legendary item, never has to be sold
+    }
 
-	protected function calculateQualityDelta() {
-		// a legendary item, never decreases in $quality
-		return 0;
-	}
+    protected function calculateQualityDelta() {
+        // a legendary item, never decreases in $quality
+        return 0;
+    }
 
-	protected function adjustLowerLimit() {
-		// legendary item and as such its $quality is 80 and it never alters.
-		$this->quality = 80;
-	}
+    protected function adjustLowerLimit() {
+        // legendary item and as such its $quality is 80 and it never alters.
+        $this->quality = 80;
+    }
 
-	protected function adjustUpperLimit() {
-		// legendary item and as such its $quality is 80 and it never alters.
-		$this->quality = 80;
-	}
+    protected function adjustUpperLimit() {
+        // legendary item and as such its $quality is 80 and it never alters.
+        $this->quality = 80;
+    }
 
 }
