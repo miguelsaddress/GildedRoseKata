@@ -1,6 +1,6 @@
 <?php
 require_once 'GildedRose.php';
-require_once 'Item.php';
+require_once 'SpecificItem.php';
 
 class GildedRoseTest extends PHPUnit_Framework_TestCase {
     
@@ -9,16 +9,16 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
 
     protected function setUp() {
         $this->initialItems = [
-            new Item('+5 Dexterity Vest', 10, 20),
-            new Item('Aged Brie', 2, 0),
-            new Item('Elixir of the Mongoose', 5, 7),
-            new Item('Sulfuras, Hand of Ragnaros', 0, 80),
-            new Item('Sulfuras, Hand of Ragnaros', -1, 80),
-            new Item('Backstage passes to a TAFKAL80ETC concert', 15, 20),
-            new Item('Backstage passes to a TAFKAL80ETC concert', 10, 49),
-            new Item('Backstage passes to a TAFKAL80ETC concert', 5, 49),
+            new SpecificItem('+5 Dexterity Vest', 10, 20),
+            new SpecificItem('Aged Brie', 2, 0),
+            new SpecificItem('Elixir of the Mongoose', 5, 7),
+            new SpecificItem('Sulfuras, Hand of Ragnaros', 0, 80),
+            new SpecificItem('Sulfuras, Hand of Ragnaros', -1, 80),
+            new SpecificItem('Backstage passes to a TAFKAL80ETC concert', 15, 20),
+            new SpecificItem('Backstage passes to a TAFKAL80ETC concert', 10, 49),
+            new SpecificItem('Backstage passes to a TAFKAL80ETC concert', 5, 49),
             // this conjured item does not work properly yet
-            new Item('Conjured Mana Cake', 3, 6)
+            new SpecificItem('Conjured Mana Cake', 3, 6)
         ];
     }
 
@@ -66,7 +66,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
 
     public function testQualityDecreasesTwiceAsFastWhenExpired() {
         //Once the sell by date has passed, $quality degrades twice as fast
-        $item = new Item('Elixir of the Mongoose', 0, 7);
+        $item = new SpecificItem('Elixir of the Mongoose', 0, 7);
         $app = new GildedRose([$item]);
         $app->updateQuality();
 
@@ -75,7 +75,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
 
     public function testQualityOfItemIsNeverNegative() {
         // The $quality of an item is never negative
-        $item = new Item('Elixir of the Mongoose', 0, 0);
+        $item = new SpecificItem('Elixir of the Mongoose', 0, 0);
         $app = new GildedRose([$item]);
         $app->updateQuality();
 
@@ -91,7 +91,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
 
     public function testAgedBrieIncreasesQualityTheOlderItGets() {
         // "Aged Brie" actually increases in $quality the older it gets
-        $item = new Item('Aged Brie', 2, 0);
+        $item = new SpecificItem('Aged Brie', 2, 0);
         $app = new GildedRose([$item]);
         $app->updateQuality();
         $this->assertEquals($item->quality, 1);
@@ -101,7 +101,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
 
     public function testQualityIsNeverMoreThan50() {
         // The $quality of an item is never more than 50
-        $item = new Item('Aged Brie', 2, 49);
+        $item = new SpecificItem('Aged Brie', 2, 49);
         $app = new GildedRose([$item]);
         $app->updateQuality();
         $this->assertEquals($item->quality, 50);
@@ -115,7 +115,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
         //"Backstage passes" increases in $quality as it's $sellIn value approaches;
         //When sellIn is greater than 10
 
-        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 22, 0);
+        $item = new SpecificItem('Backstage passes to a TAFKAL80ETC concert', 22, 0);
         $app = new GildedRose([$item]);
         $app->updateQuality();
         $this->assertEquals($item->quality, 1);
@@ -126,7 +126,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
     public function testBackStageSellInIn10DaysOrLess() {
         // "Backstage passes" increases in $quality as it's $sellIn value approaches;
         // $quality increases by 2 when there are 10 days or less 
-        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 10, 0);
+        $item = new SpecificItem('Backstage passes to a TAFKAL80ETC concert', 10, 0);
         $app = new GildedRose([$item]);
         $app->updateQuality();
         $this->assertEquals($item->quality, 2);
@@ -137,7 +137,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
     public function testBackStageSellInIn5DaysOrLess() {
         // "Backstage passes" increases in $quality as it's $sellIn value approaches;
         // and by 3 when there are 5 days or less
-        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 5, 0);
+        $item = new SpecificItem('Backstage passes to a TAFKAL80ETC concert', 5, 0);
         $app = new GildedRose([$item]);
         $app->updateQuality();
         $this->assertEquals($item->quality, 3);
@@ -149,7 +149,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
     public function testBackStageQualityDropsToZeroWhenExpired() {
         // "Backstage passes" increases in $quality as it's $sellIn value approaches;
         // but $quality drops to 0 after the concert
-        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 1, 0);
+        $item = new SpecificItem('Backstage passes to a TAFKAL80ETC concert', 1, 0);
         $app = new GildedRose([$item]);
         //Didnt expire, so the quality increases
         $app->updateQuality();
