@@ -14,8 +14,7 @@ class GildedRose {
 
     function updateQuality() {
         foreach ($this->items as $item) {
-            $item->decreaseSellIn();
-            $item->updateQuality();
+            $item->update();
         }
     }
 }
