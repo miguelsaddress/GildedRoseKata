@@ -4,6 +4,7 @@ require_once 'SpecificItem.php';
 require_once 'LegendaryItem.php';
 require_once 'QualityIncreasingItem.php';
 require_once 'ExponentialQualityIncreasingItem.php';
+require_once 'QuickDegradingItem.php';
 
 
 class GildedRoseTest extends PHPUnit_Framework_TestCase {
@@ -21,7 +22,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
             new ExponentialQualityIncreasingItem('Backstage passes to a TAFKAL80ETC concert', 10, 49),
             new ExponentialQualityIncreasingItem('Backstage passes to a TAFKAL80ETC concert', 5, 49),
             // this conjured item does not work properly yet
-            new SpecificItem('Conjured Mana Cake', 3, 6)
+            new QuickDegradingItem('Conjured Mana Cake', 3, 6)
         ];
     }
 
@@ -56,7 +57,7 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
             "Backstage passes to a TAFKAL80ETC concert, 13, 22",
             "Backstage passes to a TAFKAL80ETC concert, 8, 50",
             "Backstage passes to a TAFKAL80ETC concert, 3, 50",
-            "Conjured Mana Cake, 1, 4",
+            "Conjured Mana Cake, 1, 2",
         ];
 
         for ($i=0; $i < count($items) ; $i++) {
