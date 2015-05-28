@@ -1,3 +1,8 @@
+Resolution of the Gilded Rose Kata, starting from source code taken from :
+https://github.com/emilybache/GildedRose-Refactoring-Kata/tree/master/php
+
+
+
 ======================================
 Gilded Rose Requirements Specification
 ======================================
