@@ -36,35 +36,33 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
         );     
     }
 
-public function testExpectedOutput() {
-    $app = new GildedRose($this->initialItems);
-    $days = 2;
-    for ($i = 0; $i < 2; $i++) {
-        $app->updateQuality();
+    public function testExpectedOutput() {
+        $app = new GildedRose($this->initialItems);
+        $days = 2;
+        for ($i = 0; $i < 2; $i++) {
+            $app->updateQuality();
+        }
+
+        $items = $app->getItems();
+
+        $expectedOutput = [
+            "+5 Dexterity Vest, 8, 18",
+            "Aged Brie, 0, 2",
+            "Elixir of the Mongoose, 3, 5",
+            "Sulfuras, Hand of Ragnaros, 0, 80",
+            "Sulfuras, Hand of Ragnaros, -1, 80",
+            "Backstage passes to a TAFKAL80ETC concert, 13, 22",
+            "Backstage passes to a TAFKAL80ETC concert, 8, 50",
+            "Backstage passes to a TAFKAL80ETC concert, 3, 50",
+            "Conjured Mana Cake, 1, 4",
+        ];
+
+        for ($i=0; $i < count($items) ; $i++) {
+            $itemStr = $items[$i]->__toString();
+            $itemOutput = $expectedOutput[$i]; 
+            $this->assertEquals($itemOutput, $itemStr);
+        }
     }
-
-    $items = $app->getItems();
-
-    $expectedOutput = [
-        "+5 Dexterity Vest, 8, 18",
-        "Aged Brie, 0, 2",
-        "Elixir of the Mongoose, 3, 5",
-        "Sulfuras, Hand of Ragnaros, 0, 80",
-        "Sulfuras, Hand of Ragnaros, -1, 80",
-        "Backstage passes to a TAFKAL80ETC concert, 13, 22",
-        "Backstage passes to a TAFKAL80ETC concert, 8, 50",
-        "Backstage passes to a TAFKAL80ETC concert, 3, 50",
-        "Conjured Mana Cake, 1, 4",
-    ];
-
-    for ($i=0; $i < count($items) ; $i++) {
-        $itemStr = $items[$i]->__toString();
-        $itemOutput = $expectedOutput[$i]; 
-        $this->assertEquals($itemOutput, $itemStr);
-    }
-
-}
-
 
     public function testQualityDecreasesTwiceAsFastWhenExpired() {
         //Once the sell by date has passed, $quality degrades twice as fast
@@ -125,7 +123,6 @@ public function testExpectedOutput() {
         $this->assertEquals($item->quality, 2);
     }
 
-
     public function testBackStageSellInIn10DaysOrLess() {
         // "Backstage passes" increases in $quality as it's $sellIn value approaches;
         // $quality increases by 2 when there are 10 days or less 
@@ -147,6 +144,7 @@ public function testExpectedOutput() {
         $app->updateQuality();
         $this->assertEquals($item->quality, 6);
     }
+
 
     public function testBackStageQualityDropsToZeroWhenExpired() {
         // "Backstage passes" increases in $quality as it's $sellIn value approaches;
