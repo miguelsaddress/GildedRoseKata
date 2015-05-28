@@ -2,7 +2,10 @@
 require_once 'SpecificItem.php';
 
 class LegendaryItem extends SpecificItem {
-	public $quality = 80;
+
+    function __construct($name, $sellIn) {
+    	parent::__construct($name, $sellIn, 80);
+    }
 
 	public function decreaseSellIn() {
 		// a legendary item, never has to be sold
